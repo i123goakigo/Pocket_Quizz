@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pocket Quizzes – Self-marking maths & English quiz packs</title>
+<meta name="description" content="Self-marking maths, spelling, grammar and language quiz packs for kids. Try a free round right now.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+/* ===== EDIT ME: your shop links & name ===== */
+/* Change BUY_LINKS and BRAND in the script at the bottom of this file. */
+
+:root{
+  --ink:#1b2140; --sky:#eef3ff; --white:#fff;
+  --blue:#3556ff; --blue-d:#2239c4;
+  --sun:#ffc933; --sun-d:#d9a200;
+  --mint:#23c48e; --mint-d:#139a6e;
+  --coral:#ff5d6c; --coral-d:#d63c4b;
+  --muted:#5b6385; --line:#d7defa;
+  --r:18px;
+}
+@media (prefers-color-scheme:dark){
+  :root{--ink:#eef1ff; --sky:#12172e; --white:#1c2344; --muted:#a3acd6; --line:#2e376a;}
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{font-family:'Nunito',system-ui,sans-serif;background:var(--sky);color:var(--ink);line-height:1.6;font-size:17px}
+h1,h2,h3,.logo,button{font-family:'Fredoka','Nunito',sans-serif}
+a{color:var(--blue)}
+:focus-visible{outline:3px solid var(--sun);outline-offset:3px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+header{padding:16px 0}
+header .wrap{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.logo{font-weight:700;font-size:1.5rem;text-decoration:none;color:var(--ink);display:flex;gap:8px;align-items:center}
+.logo i{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:10px;background:var(--sun);color:#1b2140;font-style:normal;transform:rotate(-6deg)}
+nav a{margin-left:18px;text-decoration:none;font-weight:800;color:var(--ink)}
+nav a:hover{color:var(--blue)}
+@media(max-width:560px){nav a:not(.btn-link){display:none}}
+
+.btn{font-weight:600;font-size:1.05rem;border:0;cursor:pointer;color:#fff;background:var(--blue);padding:12px 22px;border-radius:14px;box-shadow:0 5px 0 var(--blue-d);text-decoration:none;display:inline-block;transition:transform .08s,box-shadow .08s}
+.btn:hover{transform:translateY(1px);box-shadow:0 4px 0 var(--blue-d)}
+.btn:active{transform:translateY(5px);box-shadow:0 0 0 var(--blue-d)}
+.btn.sun{background:var(--sun);color:#1b2140;box-shadow:0 5px 0 var(--sun-d)}
+.btn.sun:active{box-shadow:0 0 0 var(--sun-d)}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 2px var(--line)}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1fr 1.05fr;gap:40px;align-items:center;padding:28px 0 64px}
+@media(max-width:860px){.hero{grid-template-columns:1fr}}
+.hero h1{font-size:clamp(2.2rem,5.5vw,3.5rem);line-height:1.08;font-weight:700;letter-spacing:-.5px}
+.hero h1 span{background:linear-gradient(transparent 62%,var(--sun) 62%)}
+.hero p.lead{margin:18px 0 24px;color:var(--muted);font-size:1.15rem;max-width:30em}
+.ticks{list-style:none;padding:0;margin-top:22px;display:grid;gap:6px;font-weight:800}
+.ticks li::before{content:"✓";color:var(--mint);margin-right:8px;font-weight:800}
+
+/* quiz card */
+.card{background:var(--white);border-radius:24px;padding:22px;box-shadow:0 8px 0 var(--line);border:2px solid var(--line)}
+.topics{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.chip{border:2px solid var(--line);background:transparent;color:var(--ink);padding:6px 14px;border-radius:999px;cursor:pointer;font-size:.95rem;font-weight:500}
+.chip[aria-pressed=true]{background:var(--blue);border-color:var(--blue);color:#fff}
+.bar{height:12px;border-radius:99px;background:var(--line);overflow:hidden}
+.bar b{display:block;height:100%;width:0;background:var(--mint);border-radius:99px;transition:width .3s}
+.meta{display:flex;justify-content:space-between;margin:10px 0 4px;font-weight:800;color:var(--muted);font-size:.95rem}
+.q{font-family:'Fredoka',sans-serif;font-size:clamp(1.6rem,4vw,2.3rem);font-weight:600;min-height:3.2em;display:flex;align-items:center;line-height:1.2;margin:6px 0 14px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.opt{font-size:1.3rem;font-weight:600;padding:14px 10px;border-radius:14px;border:2px solid var(--line);background:var(--sky);color:var(--ink);cursor:pointer;box-shadow:0 4px 0 var(--line);transition:transform .08s}
+.opt:hover:not(:disabled){border-color:var(--blue)}
+.opt:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.opt.right{background:var(--mint);border-color:var(--mint-d);color:#06241a;box-shadow:0 4px 0 var(--mint-d)}
+.opt.wrong{background:var(--coral);border-color:var(--coral-d);color:#fff;box-shadow:0 4px 0 var(--coral-d);animation:shake .3s}
+.opt:disabled{cursor:default}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.fb{min-height:2.4em;margin-top:14px;font-weight:800;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.fb .btn{padding:8px 18px;font-size:1rem}
+
+/* results */
+.res{text-align:center;padding:6px 0}
+.stars{font-size:2.4rem;letter-spacing:6px}
+.res h3{font-size:2rem}
+.res p{color:var(--muted);margin:6px 0 14px}
+.res input{font:inherit;padding:10px 14px;border-radius:12px;border:2px solid var(--line);background:var(--sky);color:var(--ink);width:min(260px,100%);margin-bottom:14px}
+.res .row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+
+/* sections */
+section{padding:56px 0}
+section h2{font-size:clamp(1.7rem,4vw,2.4rem);line-height:1.15;margin-bottom:8px}
+section .sub{color:var(--muted);max-width:36em;margin-bottom:30px}
+.packs{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
+.pack{background:var(--white);border:2px solid var(--line);border-radius:var(--r);padding:20px;display:flex;flex-direction:column;gap:8px}
+.pack .ico{font-size:2rem;width:56px;height:56px;border-radius:16px;display:grid;place-items:center}
+.pack h3{font-size:1.3rem}
+.pack p{color:var(--muted);font-size:.97rem;flex:1}
+.price{font-family:'Fredoka';font-weight:700;font-size:1.5rem}
+.pack.best{background:var(--blue);border-color:var(--blue);color:#fff}
+.pack.best p{color:#dfe6ff}
+.pack.best .btn{background:var(--sun);color:#1b2140;box-shadow:0 5px 0 var(--sun-d)}
+.tag{align-self:flex-start;background:var(--sun);color:#1b2140;font-weight:800;font-size:.8rem;padding:2px 10px;border-radius:99px}
+
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px}
+.steps div{border-left:5px solid var(--sun);padding-left:16px}
+.steps h3{font-size:1.2rem}
+.steps p{color:var(--muted)}
+
+details{background:var(--white);border:2px solid var(--line);border-radius:14px;padding:14px 18px;margin-bottom:10px}
+summary{cursor:pointer;font-weight:800}
+details p{color:var(--muted);margin-top:8px}
+
+.cta{background:var(--ink);color:var(--sky);border-radius:28px;padding:44px 28px;text-align:center}
+@media(prefers-color-scheme:dark){.cta{background:var(--blue);color:#fff}}
+.cta h2{margin-bottom:10px}
+.cta p{opacity:.85;margin-bottom:20px}
+footer{padding:30px 0 50px;color:var(--muted);font-size:.9rem;text-align:center}
+
+/* certificate (print only) */
+#cert{display:none}
+@media print{
+  body>*:not(#cert){display:none!important}
+  body{background:#fff}
+  #cert{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;height:96vh;border:14px double #3556ff;padding:30px;color:#1b2140;font-family:'Fredoka',sans-serif}
+  #cert h1{font-size:3.2rem;color:#3556ff}
+  #cert .nm{font-size:2.8rem;border-bottom:3px solid #ffc933;padding:0 40px;margin:18px 0}
+  #cert .st{font-size:3rem;margin-top:10px}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="logo" href="#top"><i>?</i><span id="brand">Pocket Quizzes</span></a>
+    <nav>
+      <a href="#packs">Packs</a>
+      <a href="#how">How it works</a>
+      <a href="#faq">FAQ</a>
+      <a class="btn-link btn sun" href="#packs" style="margin-left:18px;color:#1b2140;padding:8px 16px">Get a pack</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+<div class="wrap">
+  <div class="hero">
+    <div>
+      <h1>Practice that marks <span>itself.</span></h1>
+      <p class="lead">Quick quiz games for maths, spelling, grammar and languages. Kids get instant feedback and stars. Parents and tutors get their evenings back.</p>
+      <a class="btn" href="#packs">See the packs</a>
+      <ul class="ticks">
+        <li>Instant right or wrong feedback</li>
+        <li>Stars and a printable certificate</li>
+        <li>Works on any phone, tablet or laptop</li>
+      </ul>
+    </div>
+
+    <!-- LIVE DEMO -->
+    <div class="card" id="game" aria-label="Free quiz round">
+      <div class="topics" id="topics" role="group" aria-label="Choose a topic"></div>
+      <div id="play">
+        <div class="meta"><span id="qn">Question 1 of 10</span><span id="score">⭐ 0</span></div>
+        <div class="bar" aria-hidden="true"><b id="prog"></b></div>
+        <div class="q" id="q" aria-live="polite"></div>
+        <div class="opts" id="opts"></div>
+        <div class="fb"><span id="fb" aria-live="polite"></span><button class="btn" id="next" hidden>Next</button></div>
+      </div>
+      <div id="done" class="res" hidden></div>
+    </div>
+  </div>
+</div>
+
+<section id="packs">
+  <div class="wrap">
+    <h2>Pick a pack</h2>
+    <p class="sub">Each pack has 10 quizzes of 20 questions, a score tracker, a certificate and a one-page parent guide.</p>
+    <div class="packs" id="packGrid"></div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <h2>Up and running in a minute</h2>
+    <p class="sub">No sign-ups, no apps to install and nothing to mark.</p>
+    <div class="steps">
+      <div><h3>Buy and download</h3><p>You get a link straight away, plus a printable PDF version.</p></div>
+      <div><h3>Open it and play</h3><p>Pick a quiz and your child answers. Right and wrong shows instantly.</p></div>
+      <div><h3>Celebrate progress</h3><p>Stars build up and the certificate prints when a round is finished.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <h2>Questions</h2>
+    <p class="sub">&nbsp;</p>
+    <details><summary>What ages is it for?</summary><p>Packs are written for ages 6 to 11 (Years 2 to 6). Each pack page says which year group it suits.</p></details>
+    <details><summary>Do we need internet or an account?</summary><p>No account. You open the file in your browser and play.</p></details>
+    <details><summary>Can I use it with my class or tutoring students?</summary><p>Yes. A pack covers one household or one tutor. Ask about a classroom licence if you need more.</p></details>
+    <details><summary>What if my child finds it too hard?</summary><p>Message us and we will help you choose a better pack, or swap it free within 14 days.</p></details>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="cta">
+      <h2>Start with a free round</h2>
+      <p>Try the quiz at the top of this page, then pick the pack that fits.</p>
+      <a class="btn sun" href="#top">Play now</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap">© <span id="yr"></span> <span id="brand2">Pocket Quizzes</span>. Made for curious kids.</div></footer>
+
+<div id="cert" aria-hidden="true">
+  <h1>Certificate of Awesome</h1>
+  <p>This is awarded to</p>
+  <div class="nm" id="certName">You</div>
+  <p id="certText"></p>
+  <div class="st" id="certStars"></div>
+</div>
+
+<script>
+/* ===== EDIT THESE ===== */
+const BRAND = "Pocket Quizzes";
+// Paste your Etsy / Gumroad / Payhip links here
+const BUY_LINKS = {
+  times:"#", math:"#", spelling:"#", grammar:"#", spanish:"#", bundle:"#"
+};
+
+/* ===== helpers ===== */
+const $ = id => document.getElementById(id);
+const rnd = (a,b) => Math.floor(Math.random()*(b-a+1))+a;
+const shuffle = a => { a=[...a]; for(let i=a.length-1;i>0;i--){const j=rnd(0,i);[a[i],a[j]]=[a[j],a[i]]} return a };
+const pick = (arr,n) => shuffle(arr).slice(0,n);
+
+function numOpts(ans, spread){
+  const s = new Set([ans]);
+  while(s.size<4){ const v = ans + rnd(-spread,spread); if(v!==ans && v>=0) s.add(v); }
+  return shuffle([...s]);
+}
+
+/* ===== question banks ===== */
+const SPELL = [["because","becuase","becouse","becasue"],["friend","freind","frend","friand"],["necessary","neccessary","necesary","necessery"],["different","diffrent","differant","diferent"],["beautiful","beutiful","beautifull","beatiful"],["separate","seperate","separete","seprate"],["favourite","favorit","favourit","faverite"],["February","Febuary","Febrary","Februry"],["library","libary","librery","liberry"],["through","thru","throgh","thorough"],["weird","wierd","wierde","weard"],["answer","anser","answare","ansewr"],["island","iland","islend","ilsand"],["Wednesday","Wensday","Wednsday","Wendesday"],["definitely","definately","definitly","defanitely"]];
+const GRAM = [
+ ["Pick the correct word: “They left ___ bags at home.”",["their","there","they’re","thier"],0],
+ ["Pick the correct word: “___ going to the park.”",["Their","There","They’re","Thair"],2],
+ ["Which sentence is correct?",["me and him went out","He and I went out","Him and me went out","Me and he went out"],1],
+ ["Which word is a verb?  “The dog jumped high.”",["dog","jumped","high","The"],1],
+ ["Which word is an adjective?  “A shiny red bike.”",["bike","A","shiny","is"],2],
+ ["Which sentence needs a question mark?",["Where is my coat","Put your coat on","What a big coat","I like my coat"],0],
+ ["Choose the correct word: “I ___ a sandwich yesterday.”",["eat","ate","eaten","eating"],1],
+ ["What is the plural of “child”?",["childs","childes","children","childrens"],2],
+ ["Choose the correct word: “She is taller ___ me.”",["then","than","that","tan"],1],
+ ["Which is a noun?",["quickly","happy","teacher","run"],2],
+ ["Which word means the opposite of “brave”?",["bold","fearful","strong","kind"],1],
+ ["Where does the apostrophe go? “The dogs bone” (one dog)",["dogs’ bone","dog’s bone","dogs bone’s","do’gs bone"],1]
+];
+const ES = [["gato","cat"],["perro","dog"],["casa","house"],["agua","water"],["libro","book"],["rojo","red"],["azul","blue"],["manzana","apple"],["leche","milk"],["escuela","school"],["amigo","friend"],["sol","sun"],["luna","moon"],["pan","bread"],["verde","green"],["gracias","thank you"]];
+
+/* ===== topics: each returns {q, o:[options], a:correctIndex} ===== */
+const TOPICS = {
+  times:{label:"Times tables",gen(){
+    const a=rnd(2,12),b=rnd(2,12),ans=a*b,o=numOpts(ans,10);
+    return {q:`${a} × ${b} = ?`,o:o.map(String),a:o.indexOf(ans)};
+  }},
+  math:{label:"Add & subtract",gen(){
+    let a=rnd(12,99),b=rnd(5,60),add=Math.random()<.5;
+    if(!add&&b>a)[a,b]=[b,a];
+    const ans=add?a+b:a-b,o=numOpts(ans,9);
+    return {q:`${a} ${add?"+":"−"} ${b} = ?`,o:o.map(String),a:o.indexOf(ans)};
+  }},
+  spelling:{label:"Spelling",gen(){
+    const w=SPELL[rnd(0,SPELL.length-1)],o=shuffle(w);
+    return {q:"Which spelling is correct?",o,a:o.indexOf(w[0])};
+  }},
+  grammar:{label:"Grammar",gen(){
+    const g=GRAM[rnd(0,GRAM.length-1)],correct=g[1][g[2]],o=shuffle(g[1]);
+    return {q:g[0],o,a:o.indexOf(correct)};
+  }},
+  spanish:{label:"Spanish words",gen(){
+    const p=ES[rnd(0,ES.length-1)],wrong=pick(ES.filter(x=>x!==p),3).map(x=>x[1]),o=shuffle([p[1],...wrong]);
+    return {q:`What does “${p[0]}” mean?`,o,a:o.indexOf(p[1])};
+  }}
+};
+const TOTAL = 10;
+
+/* ===== game state ===== */
+let topic="times", n=0, score=0, locked=false, seen=new Set();
+
+function buildTopics(){
+  const box=$("topics"); box.innerHTML="";
+  Object.entries(TOPICS).forEach(([k,t])=>{
+    const b=document.createElement("button");
+    b.className="chip"; b.textContent=t.label; b.setAttribute("aria-pressed",k===topic);
+    b.onclick=()=>{topic=k;buildTopics();start()};
+    box.appendChild(b);
+  });
+}
+function start(){
+  n=0;score=0;seen.clear();
+  $("done").hidden=true;$("play").hidden=false;
+  ask();
+}
+function ask(){
+  locked=false;
+  let item,tries=0;
+  do{item=TOPICS[topic].gen();tries++}while(seen.has(item.q)&&tries<30);
+  seen.add(item.q);
+  n++;
+  $("qn").textContent=`Question ${n} of ${TOTAL}`;
+  $("score").textContent=`⭐ ${score}`;
+  $("prog").style.width=((n-1)/TOTAL*100)+"%";
+  $("q").textContent=item.q;
+  $("fb").textContent="";$("next").hidden=true;
+  const box=$("opts");box.innerHTML="";
+  item.o.forEach((txt,i)=>{
+    const b=document.createElement("button");
+    b.className="opt";b.textContent=txt;
+    b.onclick=()=>answer(i,item,b);
+    box.appendChild(b);
+  });
+}
+function answer(i,item,btn){
+  if(locked)return;locked=true;
+  const all=[...$("opts").children];
+  all.forEach(b=>b.disabled=true);
+  if(i===item.a){
+    score++;btn.classList.add("right");
+    $("fb").textContent=["Nice one! 🎉","Correct! 🔥","Spot on! ⭐","Yes! 💪"][rnd(0,3)];
+    $("score").textContent=`⭐ ${score}`;
+  }else{
+    btn.classList.add("wrong");all[item.a].classList.add("right");
+    $("fb").textContent=`Not quite. The answer is ${item.o[item.a]}.`;
+  }
+  $("prog").style.width=(n/TOTAL*100)+"%";
+  const nx=$("next");nx.hidden=false;nx.textContent=n===TOTAL?"See my score":"Next";
+  nx.focus();
+}
+$("next").onclick=()=>{ n===TOTAL?finish():ask() };
+
+function finish(){
+  $("play").hidden=true;
+  const pct=score/TOTAL, stars=pct>=.9?3:pct>=.6?2:pct>=.3?1:0;
+  const msg=stars===3?"Superstar! Amazing work.":stars===2?"Great job! Nearly perfect.":stars===1?"Good effort. Try again to beat it!":"Every champion starts somewhere. Have another go!";
+  let best=score;
+  try{const k="pq_best_"+topic,old=+localStorage.getItem(k)||0;best=Math.max(old,score);localStorage.setItem(k,best)}catch(e){}
+  const d=$("done");d.hidden=false;
+  d.innerHTML=`<div class="stars" aria-label="${stars} out of 3 stars">${"⭐".repeat(stars)}${"☆".repeat(3-stars)}</div>
+    <h3>${score} / ${TOTAL}</h3>
+    <p>${msg} Best score on ${TOPICS[topic].label}: ${best}</p>
+    <input id="nameIn" placeholder="Type your name" aria-label="Name for certificate" maxlength="24">
+    <div class="row"><button class="btn mint" id="again">Play again</button><button class="btn sun" id="print">Print certificate</button></div>`;
+  $("again").style.background="var(--mint)";$("again").style.boxShadow="0 5px 0 var(--mint-d)";
+  $("again").onclick=start;
+  $("print").onclick=()=>{
+    $("certName").textContent=$("nameIn").value.trim()||"A Quiz Champion";
+    $("certText").textContent=`scored ${score} out of ${TOTAL} in ${TOPICS[topic].label}`;
+    $("certStars").textContent="⭐".repeat(stars)||"🌱";
+    window.print();
+  };
+}
+
+/* ===== packs ===== */
+const PACKS=[
+ {k:"times",icon:"✖️",bg:"#ffe9a8",name:"Times Tables Pack",desc:"2 to 12 times tables, mixed challenges and a speed round.",price:"£4.50"},
+ {k:"math",icon:"➕",bg:"#c9f3e3",name:"Add & Subtract Pack",desc:"Mental maths from two-digit sums up to number bonds.",price:"£4.50"},
+ {k:"spelling",icon:"🔤",bg:"#ffd3d8",name:"Spelling Pack",desc:"200 tricky words that come up again and again in school.",price:"£4.50"},
+ {k:"grammar",icon:"✏️",bg:"#d6defe",name:"Grammar Pack",desc:"Nouns, verbs, apostrophes, punctuation and more.",price:"£4.50"},
+ {k:"spanish",icon:"🌎",bg:"#ffe9a8",name:"Spanish Starter Pack",desc:"First 150 Spanish words with fun matching rounds.",price:"£4.50"},
+ {k:"bundle",icon:"🏆",bg:"#fff",name:"Year Bundle",desc:"All 5 packs, certificates and the parent guide. Best value.",price:"£15",best:true}
+];
+function buildPacks(){
+  $("packGrid").innerHTML=PACKS.map(p=>`
+   <article class="pack${p.best?" best":""}">
+     ${p.best?'<span class="tag">Save £7.50</span>':""}
+     <div class="ico" style="background:${p.bg}">${p.icon}</div>
+     <h3>${p.name}</h3><p>${p.desc}</p>
+     <div class="price">${p.price}</div>
+     <a class="btn" href="${BUY_LINKS[p.k]}" target="_blank" rel="noopener">Get this pack</a>
+   </article>`).join("");
+}
+
+/* ===== init ===== */
+$("brand").textContent=BRAND;$("brand2").textContent=BRAND;
+document.title=`${BRAND} – Self-marking maths & English quiz packs`;
+$("yr").textContent=new Date().getFullYear();
+buildPacks();buildTopics();start();
+</script>
+</body>
+</html>
